@@ -1,0 +1,12 @@
+.logo-vertical {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: white;
+  border-radius: 15px;
+  margin-top: 5px;
+  margin-left: 5px;
+  height: 58px;
+  width: 210px;
+
+  background-image: url("../../assets/images/logo1.png");
+}
