@@ -49,16 +49,16 @@ const activeUser = [
   },
 ];
 
-const adminUser = [
-  {
-    text: "Admin",
-    value: true,
-  },
-  {
-    text: "Non Admin",
-    value: false,
-  },
-];
+// const adminUser = [
+//   {
+//     text: "Admin",
+//     value: true,
+//   },
+//   {
+//     text: "Non Admin",
+//     value: false,
+//   },
+// ];
 
 const orderings = [
   {
@@ -85,11 +85,9 @@ type UsersQueryKey = [
   {
     search?: string;
     filterActive?: boolean;
-    filterAdmin?: boolean;
     ordering?: string;
   }
 ];
-
 const fetchUsers = async ({
   pageParam = 1,
   queryKey,
@@ -97,7 +95,7 @@ const fetchUsers = async ({
   pageParam?: number;
   queryKey: UsersQueryKey;
 }): Promise<any> => {
-  const [_key, { search, filterActive, filterAdmin, ordering }] = queryKey;
+  const [_key, { search, filterActive, ordering }] = queryKey;
 
   const res = await apiAxios.get(
     "https://ec2api.deltatech-backend.com/api/v1/user",
@@ -107,7 +105,6 @@ const fetchUsers = async ({
         page_size: 20,
         ...(search ? { user_name_filter: search } : {}),
         ...(filterActive !== undefined ? { is_active: filterActive } : {}),
-        ...(filterAdmin !== undefined ? { is_superuser: filterAdmin } : {}),
         ...(ordering ? { ordering } : {}),
       },
     }
@@ -117,6 +114,8 @@ const fetchUsers = async ({
 };
 
 const AdminComponent: React.FC = () => {
+
+
   const [removedPermissionIds, setRemovedPermissionIds] = useState<number[]>(
     []
   );
@@ -134,7 +133,7 @@ const AdminComponent: React.FC = () => {
   }>({});
   // ✅ mặc định là true
   const [filterActive, setFilterActive] = useState<boolean>(true);
-  const [filterAdmin, setFilterAdmin] = useState<boolean>(true);
+  // const [filterAdmin, setFilterAdmin] = useState<boolean>(true);
   const [ordering, setOrdering] = useState<string | undefined>(undefined);
   const queryClient = useQueryClient();
   const [selectedGroupIds, setSelectedGroupIds] = useState<number[]>([]);
@@ -156,7 +155,6 @@ const AdminComponent: React.FC = () => {
         {
           search: debouncedSearch,
           filterActive,
-          filterAdmin,
           ordering,
         },
       ],
@@ -467,7 +465,7 @@ const AdminComponent: React.FC = () => {
                   <th className="py-2 px-3 border text-center">User name</th>
                   <th className="py-2 px-3 border text-center">Full name</th>
                   {/* Thay th Active bằng dropdown Admin */}
-                  <th className="py-2 px-3 border text-center">
+                  {/* <th className="py-2 px-3 border text-center">
                     <select
                       className="border rounded px-2 py-1 cur"
                       value={String(filterAdmin)} // chuyển boolean sang string
@@ -481,7 +479,7 @@ const AdminComponent: React.FC = () => {
                         </option>
                       ))}
                     </select>
-                  </th>
+                  </th> */}
 
                   {/* Thay th Active bằng dropdown */}
                   <th className="py-2 px-3 border text-center">
@@ -535,9 +533,9 @@ const AdminComponent: React.FC = () => {
                         {user?.full_name}
                       </td>
 
-                      <td className="py-2 px-3 border text-center">
+                      {/* <td className="py-2 px-3 border text-center">
                         {user?.is_superuser ? "✔️" : "❌"}
-                      </td>
+                      </td> */}
                       <td className="py-2 px-3 border text-center">
                         {user?.is_active ? "✔️" : "❌"}
                       </td>
@@ -559,6 +557,7 @@ const AdminComponent: React.FC = () => {
                         <IconButton
                           onClick={() => handleOpen(user)}
                           color="primary"
+                          
                         >
                           <EditIcon />
                         </IconButton>
