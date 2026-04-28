@@ -449,8 +449,8 @@ const AdminComponent: React.FC = () => {
               <thead className="bg-gray-100 sticky top-0 z-10">
                 <tr>
                   <th className="py-2 px-3 border text-center">No.</th>
-                  <th className="py-2 px-3 border text-center">Full name</th>
                   <th className="py-2 px-3 border text-center">User name</th>
+                  <th className="py-2 px-3 border text-center">Full name</th>
 
                   {/* Thay th Active bằng dropdown */}
                   <th className="py-2 px-3 border text-center">
