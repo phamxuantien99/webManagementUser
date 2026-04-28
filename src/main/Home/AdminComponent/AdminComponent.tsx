@@ -49,17 +49,6 @@ const activeUser = [
   },
 ];
 
-// const adminUser = [
-//   {
-//     text: "Admin",
-//     value: true,
-//   },
-//   {
-//     text: "Non Admin",
-//     value: false,
-//   },
-// ];
-
 const orderings = [
   {
     text: "Default",
@@ -86,7 +75,7 @@ type UsersQueryKey = [
     search?: string;
     filterActive?: boolean;
     ordering?: string;
-  }
+  },
 ];
 const fetchUsers = async ({
   pageParam = 1,
@@ -107,17 +96,15 @@ const fetchUsers = async ({
         ...(filterActive !== undefined ? { is_active: filterActive } : {}),
         ...(ordering ? { ordering } : {}),
       },
-    }
+    },
   );
 
   return res.data;
 };
 
 const AdminComponent: React.FC = () => {
-
-
   const [removedPermissionIds, setRemovedPermissionIds] = useState<number[]>(
-    []
+    [],
   );
 
   const [search, setSearch] = useState("");
@@ -176,7 +163,7 @@ const AdminComponent: React.FC = () => {
         fetchNextPage();
       }
     },
-    [fetchNextPage, hasNextPage, isFetchingNextPage]
+    [fetchNextPage, hasNextPage, isFetchingNextPage],
   );
 
   useEffect(() => {
@@ -229,18 +216,18 @@ const AdminComponent: React.FC = () => {
       const currentActiveIds =
         userPermissions
           ?.filter(
-            (perm) => perm.is_active && !removedPermissionIds.includes(perm.id)
+            (perm) => perm.is_active && !removedPermissionIds.includes(perm.id),
           )
           .map((perm) => perm.id) || [];
 
       // ✅ Hợp nhất quyền cũ (sau khi loại bỏ xóa) + quyền mới chọn
       const finalGroupIds = Array.from(
-        new Set([...currentActiveIds, ...selectedGroupIds])
+        new Set([...currentActiveIds, ...selectedGroupIds]),
       );
 
       await apiAxios.post(
         `https://ec2api.deltatech-backend.com/api/v1/user/assign?user_id=${idUserPermission}`,
-        finalGroupIds
+        finalGroupIds,
       );
 
       toast.success("Permission updated successfully!");
@@ -296,7 +283,7 @@ const AdminComponent: React.FC = () => {
       }
 
       toast.success(
-        isAddMode ? "User added successfully!" : "User updated successfully!"
+        isAddMode ? "User added successfully!" : "User updated successfully!",
       );
       queryClient.invalidateQueries({ queryKey: ["users"] });
       setEditUser(null);
@@ -312,7 +299,7 @@ const AdminComponent: React.FC = () => {
         toast.error("User with this username already exists");
       } else {
         toast.error(
-          isCreate ? "Failed to save user!" : "Failed to update user!"
+          isCreate ? "Failed to save user!" : "Failed to update user!",
         );
       }
     } finally {
@@ -333,13 +320,13 @@ const AdminComponent: React.FC = () => {
   /*******  79a4bdd8-6cce-4f10-b240-13886d514bd9  *******/
   const handleDeleteUser = async (userId: number) => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this user?"
+      "Are you sure you want to delete this user?",
     );
     if (!confirmed) return;
 
     try {
       await apiAxios.put(
-        `https://ec2api.deltatech-backend.com/api/v1/user/delete/${userId}`
+        `https://ec2api.deltatech-backend.com/api/v1/user/delete/${userId}`,
       );
       toast.success("User deleted successfully!");
 
@@ -421,7 +408,7 @@ const AdminComponent: React.FC = () => {
               <Typography component="span" color="primary" fontWeight={500}>
                 {data?.pages.reduce(
                   (acc: any, page: any) => acc + page?.founds?.length,
-                  0
+                  0,
                 )}
               </Typography>{" "}
               /{" "}
@@ -443,7 +430,7 @@ const AdminComponent: React.FC = () => {
                 value={String(ordering)} // chuyển boolean sang string
                 onChange={(e) => {
                   setOrdering(
-                    e.target.value === "undefined" ? undefined : e.target.value
+                    e.target.value === "undefined" ? undefined : e.target.value,
                   );
                 }}
               >
@@ -462,24 +449,8 @@ const AdminComponent: React.FC = () => {
               <thead className="bg-gray-100 sticky top-0 z-10">
                 <tr>
                   <th className="py-2 px-3 border text-center">No.</th>
-                  <th className="py-2 px-3 border text-center">User name</th>
                   <th className="py-2 px-3 border text-center">Full name</th>
-                  {/* Thay th Active bằng dropdown Admin */}
-                  {/* <th className="py-2 px-3 border text-center">
-                    <select
-                      className="border rounded px-2 py-1 cur"
-                      value={String(filterAdmin)} // chuyển boolean sang string
-                      onChange={(e) => {
-                        setFilterAdmin(e.target.value === "true");
-                      }}
-                    >
-                      {adminUser.map((item, index) => (
-                        <option key={index} value={String(item.value)}>
-                          {item.text}
-                        </option>
-                      ))}
-                    </select>
-                  </th> */}
+                  <th className="py-2 px-3 border text-center">User name</th>
 
                   {/* Thay th Active bằng dropdown */}
                   <th className="py-2 px-3 border text-center">
@@ -546,7 +517,7 @@ const AdminComponent: React.FC = () => {
                             const formattedName = group.name
                               .replace(/_/g, " ") // thay _ bằng dấu cách
                               .replace(/\b\w/g, (char: any) =>
-                                char.toUpperCase()
+                                char.toUpperCase(),
                               ); // viết hoa chữ cái đầu
                             return `${group.id} - ${formattedName}`;
                           })
@@ -557,7 +528,6 @@ const AdminComponent: React.FC = () => {
                         <IconButton
                           onClick={() => handleOpen(user)}
                           color="primary"
-                          
                         >
                           <EditIcon />
                         </IconButton>
@@ -731,7 +701,7 @@ const AdminComponent: React.FC = () => {
                         .filter(
                           (perm) =>
                             perm.is_active &&
-                            !removedPermissionIds.includes(perm.id)
+                            !removedPermissionIds.includes(perm.id),
                         )
                         .map((perm) => (
                           <Chip
@@ -772,7 +742,7 @@ const AdminComponent: React.FC = () => {
                       setSelectedGroupIds(
                         typeof value === "string"
                           ? value.split(",").map(Number)
-                          : value
+                          : value,
                       );
                     }}
                     label="Chọn nhóm quyền"
@@ -821,7 +791,7 @@ const AdminComponent: React.FC = () => {
                                     >
                                       {index + 1}. {formatLabel(p.name)}
                                     </Typography>
-                                  )
+                                  ),
                                 )
                               ) : (
                                 <Typography
